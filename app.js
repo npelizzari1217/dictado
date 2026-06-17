@@ -249,23 +249,15 @@ function actualizarBotonEscuchar() {
 //  El front solo hace fetch a /api/modelos y /api/generar.
 // =============================================================
 
-// Presets por proveedor para autocompletar el formulario.
-// Deben coincidir con PROVEEDORES_PRESETS en server/server.js.
-const PROVEEDORES_PRESETS = {
-  openai:    { endpoint: "https://api.openai.com/v1/chat/completions",                                       modelo: "gpt-4o-mini"       },
-  deepseek:  { endpoint: "https://api.deepseek.com/v1/chat/completions",                                     modelo: "deepseek-chat"     },
-  minimax:   { endpoint: "https://api.minimax.io/v1/text/chatcompletion_v2",                                 modelo: "MiniMax-Text-01"   },
-  anthropic: { endpoint: "https://api.anthropic.com/v1/messages",                                            modelo: "claude-sonnet-4-6" },
-  gemini:    { endpoint: "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",  modelo: "gemini-3.1-flash-lite" },
-  custom:    { endpoint: "http://localhost:1234/v1/chat/completions",                                         modelo: "local-model"       },
-};
+// Presets por proveedor (endpoint + modelo). Fuente única: server/server.js vía GET /api/proveedores.
+let proveedoresPresets = {};
 
 // Caché local de modelos (se recarga desde el servidor después de cada operación).
 let modelosCache = [];
 
 /** Aplica el preset de endpoint + modelo al elegir un proveedor en el formulario. */
 function aplicarPreset(proveedor) {
-  const preset = PROVEEDORES_PRESETS[proveedor];
+  const preset = proveedoresPresets[proveedor];
   if (!preset) return;
   $fmEndpoint.value = preset.endpoint;
   $fmModelo.value   = preset.modelo;
@@ -281,6 +273,18 @@ async function cargarModelos() {
     actualizarEstadoBadge();
   } catch (err) {
     console.error("[cargarModelos] error:", err);
+  }
+}
+
+/** Carga los presets de proveedores desde el backend (fuente única) y aplica el inicial. */
+async function cargarProveedoresPresets() {
+  try {
+    const resp = await fetch("/api/proveedores");
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    proveedoresPresets = await resp.json();
+    aplicarPreset($fmProveedor.value); // autofill inicial, ahora que ya hay datos
+  } catch (err) {
+    console.error("[cargarProveedoresPresets] error:", err);
   }
 }
 
@@ -501,6 +505,8 @@ async function generarConIA() {
 function iniciarABM() {
   // Carga inicial de la lista desde el backend.
   cargarModelos();
+  // Carga los presets de proveedores (fuente única) y dispara el autofill inicial.
+  cargarProveedoresPresets();
 
   // Autofill al cambiar proveedor en el formulario.
   $fmProveedor.addEventListener("change", () => aplicarPreset($fmProveedor.value));
@@ -513,9 +519,6 @@ function iniciarABM() {
 
   // Delegación de eventos en la lista (Activar / Editar / Borrar).
   $listaModelos.addEventListener("click", alClickListaModelos);
-
-  // Autofill inicial con el preset del proveedor seleccionado por defecto.
-  aplicarPreset($fmProveedor.value);
 }
 
 // =============================================================
