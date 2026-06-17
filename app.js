@@ -163,10 +163,24 @@ const SpeechRecognition =
 let reconocimiento = null;
 let escuchando = false; // bandera de intención del usuario
 
+// Detección de Android (Chrome móvil) para mitigar el eco de la Web Speech API (bug Chromium 40324711).
+const esAndroid =
+  navigator.userAgentData?.mobile ?? /Android/i.test(navigator.userAgent);
+
+// Índices de resultados FINALES ya procesados en la sesión actual (anti-duplicado).
+let indicesVistos = new Set();
+
+// Único punto de arranque: resetea el registro de índices ANTES de cada start().
+// Centralizarlo evita que en desktop queden índices viejos tras el auto-restart (quedaría mudo).
+function arrancar(r) {
+  indicesVistos = new Set();
+  r.start();
+}
+
 function crearReconocimiento() {
   const r = new SpeechRecognition();
   r.lang = "es-AR";
-  r.continuous = true; // pedimos modo continuo…
+  r.continuous = !esAndroid; // desktop: modo continuo; Android: roto (causa eco), arrancamos por tanda
   r.interimResults = true; // …y resultados provisionales para el feedback en vivo
 
   // Llega texto: separamos lo FINAL (confirmado) de lo INTERINO (en vivo).
@@ -177,6 +191,9 @@ function crearReconocimiento() {
       const transcript = resultado[0].transcript;
 
       if (resultado.isFinal) {
+        if (indicesVistos.has(i)) continue;          // L2: ya procesado (resultIndex no es fiable en Android)
+        if (resultado[0].confidence === 0) continue; // L1: final espurio de Android (continue, NO return)
+        indicesVistos.add(i);
         // Solo el texto confirmado pasa por el parser de comandos.
         aplicarOperaciones(parsear(transcript));
       } else {
@@ -191,10 +208,15 @@ function crearReconocimiento() {
   // tras silencios. Si el usuario no apretó "Detener" (escuchando === true),
   // lo reiniciamos automáticamente.
   r.onend = () => {
-    if (escuchando) {
-      r.start();
-    } else {
+    if (!escuchando) {
       actualizarBotonEscuchar();
+      return;
+    }
+    // En Android, reiniciar de inmediato re-emite el último final (eco). Le damos un respiro.
+    if (esAndroid) {
+      setTimeout(() => { if (escuchando) arrancar(r); }, 300);
+    } else {
+      arrancar(r);
     }
   };
 
@@ -227,7 +249,7 @@ function alternarEscucha() {
   if (!escuchando) {
     escuchando = true;
     reconocimiento = reconocimiento || crearReconocimiento();
-    reconocimiento.start();
+    arrancar(reconocimiento);
   } else {
     escuchando = false;
     reconocimiento && reconocimiento.stop();
