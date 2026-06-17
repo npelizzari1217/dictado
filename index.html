@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dictado por voz — PoC</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="app__header">
+      <h1>🎙️ Dictado por voz</h1>
+      <p class="app__subtitle">Dictá texto y usá comandos de voz para editarlo.</p>
+    </header>
+
+    <!-- Indicador de soporte / estado del navegador -->
+    <div id="aviso" class="aviso" hidden></div>
+
+    <!-- ABM de modelos de IA -->
+    <details class="config" id="config">
+      <summary class="config__summary">
+        ⚙️ Modelos de IA <span id="configEstado" class="config__estado"></span>
+      </summary>
+
+      <div class="config__cuerpo">
+
+        <!-- Formulario para agregar o editar un modelo -->
+        <form id="formModelo" class="modelo-form">
+          <input type="hidden" id="fmId" />
+
+          <label class="campo">
+            <span class="campo__label">Nombre (alias)</span>
+            <input id="fmNombre" class="campo__input" type="text" placeholder="Ej: Mi GPT-4o" required />
+          </label>
+
+          <label class="campo">
+            <span class="campo__label">Proveedor</span>
+            <select id="fmProveedor" class="campo__input">
+              <option value="openai">OpenAI</option>
+              <option value="deepseek">DeepSeek</option>
+              <option value="minimax">MiniMax</option>
+              <option value="anthropic">Anthropic (Claude)</option>
+              <option value="gemini">Google Gemini</option>
+              <option value="custom">Otro / Local (OpenAI-compatible)</option>
+            </select>
+          </label>
+
+          <label class="campo">
+            <span class="campo__label">Endpoint (URL de la API)</span>
+            <input id="fmEndpoint" class="campo__input" type="text" placeholder="https://…" required />
+          </label>
+
+          <label class="campo">
+            <span class="campo__label">Modelo</span>
+            <input id="fmModelo" class="campo__input" type="text" placeholder="nombre-del-modelo" required />
+          </label>
+
+          <label class="campo">
+            <span class="campo__label">API Key</span>
+            <input id="fmApiKey" class="campo__input" type="password" placeholder="pegá tu API Key acá" autocomplete="off" />
+            <span id="fmApiKeyNota" class="campo__nota" hidden>Dejá vacío para conservar la key guardada.</span>
+          </label>
+
+          <div class="config__acciones">
+            <button id="btnGuardarModelo" class="btn btn--guardar" type="submit">💾 Guardar</button>
+            <button id="btnCancelarEditar" class="btn btn--cancelar" type="button" hidden>✕ Cancelar</button>
+          </div>
+        </form>
+
+        <!-- Lista de modelos guardados -->
+        <div id="listaModelos" class="modelos-lista"></div>
+
+        <p class="config__nota">
+          ⚠️ Las API Keys se guardan en el servidor local. No compartás ni publiques esta instancia.
+        </p>
+
+      </div>
+    </details>
+
+    <section class="editor">
+      <textarea
+        id="texto"
+        class="editor__area"
+        placeholder="Apretá «Escuchar» y empezá a dictar…"
+        aria-label="Área de texto dictado"
+      ></textarea>
+
+      <!-- Transcripción provisional (lo que el motor escucha en vivo, aún no confirmado) -->
+      <p id="interino" class="editor__interino" aria-live="polite"></p>
+    </section>
+
+    <section class="controles">
+      <button id="btnEscuchar" class="btn btn--escuchar" type="button">
+        <span class="btn__icono" aria-hidden="true">●</span>
+        <span class="btn__texto">Escuchar</span>
+      </button>
+
+      <button id="btnGenerar" class="btn btn--generar" type="button">
+        ✨ Generar con IA
+      </button>
+    </section>
+
+    <!-- Ayuda: lista de comandos disponibles (se rellena desde JS para no duplicar la fuente de verdad) -->
+    <section class="ayuda">
+      <h2 class="ayuda__titulo">Comandos de voz disponibles</h2>
+      <ul id="listaComandos" class="ayuda__lista"></ul>
+    </section>
+
+    <!-- Salida de la "IA" (simulada hasta que pongas tu API Key) -->
+    <section class="salida" id="salida" hidden>
+      <h2 class="salida__titulo">Respuesta</h2>
+      <pre id="salidaContenido" class="salida__contenido"></pre>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

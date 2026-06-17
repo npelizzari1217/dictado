@@ -1,0 +1,12 @@
+{
+  "name": "dictado",
+  "version": "1.0.0",
+  "description": "Dictado por voz con ABM de modelos de IA",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.4.3",
+    "express": "^4.19.2"
+  }
+}

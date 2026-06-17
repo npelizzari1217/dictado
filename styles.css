@@ -1,0 +1,396 @@
+:root {
+  --bg: #0f172a;
+  --panel: #1e293b;
+  --panel-2: #273449;
+  --texto: #e2e8f0;
+  --muted: #94a3b8;
+  --acento: #38bdf8;
+  --peligro: #f87171;
+  --ok: #34d399;
+  --radio: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--texto);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.app {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.app__header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.app__subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+}
+
+/* Aviso de soporte del navegador */
+.aviso {
+  background: #422006;
+  border: 1px solid #b45309;
+  color: #fde68a;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radio);
+  font-size: 0.9rem;
+}
+
+/* Configuración de IA */
+.config {
+  background: var(--panel);
+  border: 1px solid #334155;
+  border-radius: var(--radio);
+  padding: 0.75rem 1rem;
+}
+
+.config__summary {
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.config__estado {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+
+.config__estado--ok {
+  background: #064e3b;
+  color: var(--ok);
+}
+
+.config__estado--falta {
+  background: #422006;
+  color: #fde68a;
+}
+
+.config__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.campo__label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.campo__input {
+  background: var(--panel-2);
+  color: var(--texto);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.campo__input:focus {
+  border-color: var(--acento);
+}
+
+.config__acciones {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn--guardar {
+  background: var(--ok);
+  color: #052e1b;
+  flex: 0 0 auto;
+}
+
+.btn--borrar {
+  background: transparent;
+  color: var(--peligro);
+  border: 1px solid var(--peligro);
+  flex: 0 0 auto;
+}
+
+.config__nota {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #fbbf24;
+  line-height: 1.4;
+}
+
+/* Editor */
+.editor__area {
+  width: 100%;
+  min-height: 220px;
+  resize: vertical;
+  background: var(--panel);
+  color: var(--texto);
+  border: 1px solid #334155;
+  border-radius: var(--radio);
+  padding: 1rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  outline: none;
+}
+
+.editor__area:focus {
+  border-color: var(--acento);
+}
+
+.editor__interino {
+  margin: 0.5rem 0 0;
+  min-height: 1.2em;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Controles */
+.controles {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  flex: 1;
+  min-width: 160px;
+  border: none;
+  border-radius: var(--radio);
+  padding: 0.9rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: transform 0.05s ease, background 0.2s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--escuchar {
+  background: var(--panel-2);
+  color: var(--texto);
+}
+
+.btn--escuchar .btn__icono {
+  color: var(--muted);
+}
+
+/* Estado activo: la app está escuchando */
+.btn--escuchar.activo {
+  background: #7f1d1d;
+  color: #fff;
+}
+
+.btn--escuchar.activo .btn__icono {
+  color: var(--peligro);
+  animation: pulso 1s infinite;
+}
+
+@keyframes pulso {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.btn--generar {
+  background: var(--acento);
+  color: #082f49;
+}
+
+.btn--generar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Ayuda */
+.ayuda__titulo,
+.salida__titulo {
+  font-size: 1rem;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+}
+
+.ayuda__lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.ayuda__lista li {
+  background: var(--panel);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.ayuda__lista code {
+  color: var(--acento);
+  font-weight: 600;
+}
+
+/* ABM de modelos */
+
+.campo__nota {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+.modelo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #334155;
+  margin-bottom: 1rem;
+}
+
+.modelos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modelos-vacio {
+  color: var(--muted);
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.modelo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: var(--panel-2);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+}
+
+.modelo--activo {
+  border-color: var(--acento);
+  background: #0c2a3d;
+}
+
+.modelo__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.modelo__nombre {
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modelo__detalle {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.modelo__key {
+  font-size: 0.75rem;
+  color: #475569;
+  font-family: monospace;
+}
+
+.modelo__acciones {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.modelo__badge-activo {
+  font-size: 0.75rem;
+  color: var(--ok);
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  background: #064e3b;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* Botones pequeños de la lista de modelos */
+.btn--sm {
+  flex: none;
+  min-width: auto;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  border-radius: 6px;
+}
+
+.btn--activar {
+  background: transparent;
+  color: var(--acento);
+  border: 1px solid var(--acento);
+}
+
+.btn--editar {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid #334155;
+}
+
+.btn--borrar-item {
+  background: transparent;
+  color: var(--peligro);
+  border: 1px solid transparent;
+}
+
+.btn--cancelar {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid #334155;
+  flex: 0 0 auto;
+}
+
+/* Salida IA */
+.salida__contenido {
+  background: var(--panel);
+  border: 1px solid #334155;
+  border-radius: var(--radio);
+  padding: 1rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}

@@ -1,0 +1,17 @@
+# Dependencias
+node_modules/
+
+# Base de datos SQLite (CONTIENE API KEYS — nunca subir)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+server/dictado.db
+
+# Variables de entorno
+.env
+.env.*
+
+# Logs / sistema
+*.log
+.DS_Store
