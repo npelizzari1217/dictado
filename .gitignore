@@ -15,3 +15,9 @@ server/dictado.db
 # Logs / sistema
 *.log
 .DS_Store
+
+# Gentle AI skill registry (generado por maquina, no versionar)
+.atl/
+
+# Config local de gga (herramienta personal, no del proyecto)
+.gga
