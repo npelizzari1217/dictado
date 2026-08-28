@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "d=\"${CLAUDE_PROJECT_DIR:-$PWD}\"; if [ -e \"$d/.git\" ] && ! grep -qs install-pre-push-guard \"$d/.git/hooks/pre-push\"; then printf %s '{\"systemMessage\":\"Este clon NO tiene el guard de force-push instalado en esta maquina. Corre: powershell -ExecutionPolicy Bypass -File $HOME/install-pre-push-guard.ps1 -Apply -SetupTemplate\",\"hookSpecificOutput\":{\"hookEventName\":\"SessionStart\",\"additionalContext\":\"El hook pre-push que bloquea force-push y borrado de main/master NO esta instalado en este clon. Antes de cualquier push a la rama principal, ofrecele al usuario correr install-pre-push-guard.ps1 con -Apply -SetupTemplate.\"}}'; fi; exit 0",
+            "statusMessage": "Checking force-push guard"
+          }
+        ]
+      }
+    ]
+  }
+}
