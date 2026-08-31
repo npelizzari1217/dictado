@@ -1,12 +1,15 @@
 # CLAUDE.md — dictado
 
-> Las reglas universales (SDD, modelo por fase, commits, branch+PR, tests, código) están en
-> `C:\trabajos\CLAUDE.md`. Este archivo contiene solo lo específico de este proyecto.
+> Las reglas universales (SDD, tabla de modelos, persistencia, commits, rama+PR, TDD,
+> delegación, estándares de código) están en `~/proyectos/CLAUDE.md`. Este archivo contiene
+> solo lo específico de este proyecto.
 
-## [Overrides locales]
+---
 
-Todo lo que define `C:\trabajos\CLAUDE.md` aplica, salvo estas anulaciones explícitas.
-Verificado el 2026-08-30.
+## [Overrides]
+
+Este proyecto se aparta del global en dos puntos, y los dos salen de la misma causa: es
+JavaScript plano y no tiene test runner.
 
 - **ANULA:** "Prohibido `any` en TypeScript" y "los miembros exportados llevan tipos
   explícitos" — **Motivo:** este proyecto es JavaScript plano por decisión. No hay
@@ -21,9 +24,6 @@ Verificado el 2026-08-30.
   (un formato de proveedor nuevo, reglas de validación, la transacción de activación)
   obliga a proponer la configuración de Vitest antes de cerrar.
   **Al configurarlo, esta anulación se borra** y rige el TDD global.
-
-> Nota: el copy de UI en español **ya no es una anulación**. Desde el 2026-08-30 el global
-> pide español en todo lo que lee una persona, así que este proyecto quedó alineado.
 
 ---
 
