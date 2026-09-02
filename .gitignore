@@ -31,3 +31,6 @@ server/dictado.db
 
 # La plantilla SI se commitea: es la documentacion de que variables hacen falta.
 !.env.example
+
+# Config local de Claude Code (la escribe la herramienta, no se versiona)
+.claude/settings.local.json
