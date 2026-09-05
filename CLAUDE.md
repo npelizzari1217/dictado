@@ -1,6 +1,6 @@
 # CLAUDE.md — dictado
 
-> Las reglas universales (SDD, tabla de modelos, persistencia, commits, rama+PR, TDD,
+> Las reglas universales (SDD, modelos de cada fase, persistencia, commits, rama+PR, TDD,
 > delegación, estándares de código) están en `~/proyectos/CLAUDE.md`. Este archivo contiene
 > solo lo específico de este proyecto.
 
