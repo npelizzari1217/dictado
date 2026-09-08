@@ -1,0 +1,41 @@
+name: gates
+
+# Se dispara en cada push a master y en cada pull request,
+# para validar el código antes de integrarlo a la rama principal.
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+# Cancela ejecuciones anteriores en curso para el mismo ref
+# (misma rama o mismo PR) cuando llega un push nuevo, evitando
+# gastar minutos de CI en resultados que van a quedar obsoletos.
+concurrency:
+  group: gates-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    # El proyecto no tiene devDependencies ni build, así que el job
+    # es liviano: este límite es solo una salvaguarda ante cuelgues.
+    timeout-minutes: 10
+    steps:
+      - name: Descargar el código del repositorio
+        uses: actions/checkout@v7
+
+      - name: Configurar Node.js según .nvmrc
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Instalar dependencias (según package-lock.json)
+        run: npm ci
+
+      # "verify" ejecuta "lint" (chequeo de sintaxis con node --check
+      # sobre cada .js) seguido de "test" (node --test), es decir,
+      # cubre en un solo paso las dos compuertas de calidad del proyecto.
+      - name: Ejecutar lint y tests (npm run verify)
+        run: npm run verify
