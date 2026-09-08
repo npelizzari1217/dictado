@@ -59,9 +59,9 @@ testing:
 
 rules:
   proposal:
-    - No proponer frameworks, bundlers, build step ni TypeScript: está fuera de alcance por decisión de arquitectura documentada en CLAUDE.md.
+    - "No proponer frameworks, bundlers, build step ni TypeScript: está fuera de alcance por decisión de arquitectura documentada en CLAUDE.md."
     - No proponer ESLint, Prettier, Jest ni Vitest ni ninguna devDependency nueva.
-    - Toda propuesta que toque el manejo de API keys debe preservar el invariante: nunca llegan al navegador.
+    - "Toda propuesta que toque el manejo de API keys debe preservar el invariante: nunca llegan al navegador."
     - Incluir plan de rollback para cambios riesgosos.
   specs:
     - Usar Given/When/Then para escenarios.
@@ -87,27 +87,3 @@ rules:
     coverage_threshold: 0
   archive:
     - Advertir antes de fusionar deltas destructivos.
-
-# ---------------------------------------------------------------------------
-# Modelos por fase SDD — override del default global.
-#
-# Precedencia (mayor a menor):
-#   1. este bloque `models:`
-#   2. tabla "Model Assignments" de ~/.claude/CLAUDE.md
-#   3. fila `default` de esa tabla
-#
-# Declarar SOLO las fases que se apartan del global; el resto hereda.
-# Fases válidas: sdd-explore, sdd-research, sdd-propose, sdd-spec, sdd-design,
-# sdd-tasks, sdd-apply, sdd-verify, sdd-archive, sdd-onboard,
-# jd-judge-a, jd-judge-b, jd-fix-agent.
-#
-# La SECUENCIA del ciclo no se configura acá: es global e inmutable
-# (proyectos/CLAUDE.md, sección 6.1). Este bloque elige con qué modelo corre
-# cada fase, nunca qué fases se corren ni en qué orden.
-#
-# Lo lee el orquestador antes de delegar. `gentle-ai` lo ignora.
-#
-# models:
-#   sdd-apply: opus
-#   sdd-verify: opus
-# ---------------------------------------------------------------------------
