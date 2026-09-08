@@ -5,7 +5,7 @@ name: gates
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
 
 # Cancela ejecuciones anteriores en curso para el mismo ref
