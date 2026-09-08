@@ -1,44 +1,9 @@
-# CLAUDE.md — dictado
-
-> Las reglas universales (SDD, modelos de cada fase, persistencia, commits, rama+PR, TDD,
-> delegación, estándares de código) están en `~/proyectos/CLAUDE.md`. Este archivo contiene
-> solo lo específico de este proyecto.
-
----
-
-## [Overrides]
-
-Este proyecto se aparta del global en dos puntos, y los dos salen de la misma causa: es
-JavaScript plano y no tiene test runner.
-
-- **ANULA:** "Prohibido `any` en TypeScript" y "los miembros exportados llevan tipos
-  explícitos" — **Motivo:** este proyecto es JavaScript plano por decisión. No hay
-  compilador de tipos que sostenga la regla, así que exigirla es pedir algo que no se
-  puede verificar.
-  **REEMPLAZA POR:** JSDoc con `@param` y `@returns` tipados en toda función exportada y
-  en todo helper no obvio. Es el sustituto verificable por lectura.
-
-- **ANULA:** TDD como bloqueante — **Motivo:** no hay test runner configurado
-  (`package.json` solo define `start`), así que no existe el paso RED.
-  **REEMPLAZA POR:** no bloquea el cambio. Pero todo cambio que agregue lógica no trivial
-  (un formato de proveedor nuevo, reglas de validación, la transacción de activación)
-  obliga a proponer la configuración de Vitest antes de cerrar.
-  **Al configurarlo, esta anulación se borra** y rige el TDD global.
-
----
-
-## Qué es
-
-App de dictado por voz con ABM de modelos de IA. El frontend usa la Web Speech API
-(`SpeechRecognition`) en el navegador; el backend resguarda las API keys de los
-proveedores de IA para que nunca lleguen al cliente.
-
 ## Stack
 
 JS vanilla (sin framework, sin build, sin TypeScript) · Express 4 · better-sqlite3
-(síncrono) · SQLite (`server/dictado.db`)
+(síncrono) · SQLite (`server/dictado.db`) · Node ≥ 24
 
-Sin test runner configurado: `package.json` solo define `start`.
+Verificación con herramientas nativas de Node: sin dependencias de desarrollo.
 
 ## Invariante de seguridad — no negociable
 
@@ -51,6 +16,38 @@ plano y está gitignoreado — tiene que seguir así.
 JavaScript plano, sin framework, sin bundler y sin build por decisión. No sugerir
 adoptarlos: está fuera del alcance.
 
+Esta decisión alcanza también al herramental de verificación: nada de ESLint, Prettier,
+Jest o Vitest. Las compuertas de abajo usan solo lo que Node 24 ya trae, y por eso
+`package.json` no tiene `devDependencies`. Mantenerlo así.
+
 ## Comandos
 
-`npm start` (= `node server/server.js`)
+| Comando | Qué hace |
+|---|---|
+| `npm start` | Levanta el servidor (`node server/server.js`) |
+| `npm run lint` | Chequeo de sintaxis con `node --check` sobre todos los `.js` del repo |
+| `npm test` | Test runner nativo de Node (`node --test`) |
+| `npm run verify` | Las dos compuertas en orden: `lint` y luego `test` |
+
+`npm run verify` es la compuerta previa a cualquier commit. Corre en WSL.
+
+## Compuertas de calidad
+
+Este proyecto cumple dos de las tres compuertas que exigen las reglas globales de
+`proyectos/CLAUDE.md`:
+
+| Compuerta | Estado |
+|---|---|
+| Lint / formato | `npm run lint` — `node --check` sobre cada `.js`. Un error de sintaxis corta con exit 1. |
+| Tests | `npm test` — `node --test`. Hoy no hay archivos de test: el runner sale 0. Todo test nuevo va en `*.test.js` y lo levanta solo. |
+| Compilación / tipos | **No aplica.** Excepción declarada. |
+
+**Excepción a las reglas globales, sección 0.** No hay compuerta de compilación ni de
+tipos porque el proyecto es JavaScript plano sin build ni TypeScript, por la decisión
+de arquitectura documentada arriba. `node --check` cubre el único error que un build
+detectaría acá: la sintaxis inválida. No es una compuerta pendiente de configurar; es
+una compuerta que no corresponde.
+
+Nota sobre `npm run lint`: el script usa `find` y no `fd` a propósito. `find` es POSIX y
+está en cualquier máquina donde corra el repo; depender de `fd` agregaría una
+dependencia de sistema no declarada.
