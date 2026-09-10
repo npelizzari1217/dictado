@@ -14,6 +14,13 @@ context: |
   Verificación 100% con herramientas nativas de Node: sin devDependencies, sin
   ESLint/Prettier/Jest/Vitest. package.json no debe ganar devDependencies.
 
+# La excepcion de los bugfixes NO cabe en este booleano, y por eso va escrita aca:
+# strict_tdd: false aplica SOLO a las features. En un cambio cuyo tipo de trabajo es
+# CORRECCION DE DEFECTO, TDD sigue siendo OBLIGATORIO. El orquestador inyecta
+# "STRICT TDD MODE IS ACTIVE" al lanzar sdd-apply y sdd-verify, y esa inyeccion manda
+# por encima de este valor: sdd-apply debe cargar strict-tdd.md y entregar su tabla de
+# TDD Cycle Evidence (RED -> GREEN -> REFACTOR), y sdd-verify la exige.
+# Ver la seccion `## Tests` de AGENTS.md y la 6.3 de ~/proyectos/CLAUDE.md.
 strict_tdd: false
 
 projects:
