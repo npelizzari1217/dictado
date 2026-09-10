@@ -14,7 +14,7 @@ context: |
   Verificación 100% con herramientas nativas de Node: sin devDependencies, sin
   ESLint/Prettier/Jest/Vitest. package.json no debe ganar devDependencies.
 
-strict_tdd: true
+strict_tdd: false
 
 projects:
   - path: "."
@@ -25,7 +25,7 @@ projects:
     framework: "node:test (nativo, sin dependencias)"
 
 testing:
-  strict_tdd: true
+  strict_tdd: false
   detected: 2026-09-08
   note: >
     Hoy no existen archivos de test en el repo. La capacidad reportada es la del
