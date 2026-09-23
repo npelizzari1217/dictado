@@ -1,20 +1,18 @@
 # AGENTS.md — estándares de revisión de `dictado`
 
 > Este archivo lo consume la revisión automática de código (GGA), que lee **solo este
-> archivo**: no puede abrir el `AGENTS.md` global. Por eso las reglas universales están
-> copiadas acá abajo, entre los marcadores `BEGIN:global` / `END:global`, y las mantiene
-> sincronizadas `sync-agents.py`. **No edites ese bloque a mano.**
+> archivo**. Por eso las reglas universales están copiadas acá abajo, entre los marcadores
+> `BEGIN:global` / `END:global`, y se mantienen a mano: no hay sincronización automática.
 >
-> Lo que va **después** del bloque es lo propio de este proyecto: amplía al global.
+> Lo que va **después** del bloque es lo propio de este proyecto: amplía a las universales.
 >
 > Señalá solo lo accionable y apoyado en el diff. Esta revisión corre en `pre-commit`, sobre
 > un commit suelto, antes de que exista el PR y sin conocer el resto de la rama: no reportes
 > nada sobre el PR ni sobre el tamaño de la rama, porque no los podés ver.
 
 <!-- BEGIN:global -->
-<!-- Generado por sync-agents.py desde ~/proyectos/AGENTS.md (v05ed8761).
-     NO EDITAR A MANO: el proximo sync pisa los cambios.
-     Para cambiar una regla universal, edita el global y volve a correr el script. -->
+<!-- Reglas universales. Los marcadores delimitan el bloque que la revision
+     automatica necesita leer entero; se mantiene a mano, editando aca. -->
 
 ## Lenguaje y tipos
 
@@ -28,8 +26,7 @@
 - **Las descripciones de test (`describe`/`it`) son la EXCEPCIÓN: no tienen idioma fijo.**
   Se sigue el idioma de los `it()` **del archivo que se toca**, no el de la regla de arriba.
   **Un `it()` nuevo en inglés NO es un hallazgo** si sus vecinos del archivo están en
-  inglés, y viceversa. Los comentarios DENTRO del cuerpo del test sí van en español
-  siempre. Si el repo tiene un censo medido, vive en su sección propia, no acá.
+  inglés, y viceversa. Si el repo tiene un censo medido, vive en su sección propia, no acá.
 - **La regla NO es retroactiva.** No reportes copy, mensajes de error ni comentarios en
   inglés preexistentes: **solo los nuevos**, y solo en las líneas que el diff agrega o
   reescribe. Un archivo con copy viejo en inglés no es un hallazgo.
@@ -78,10 +75,16 @@
 
 ---
 
-## Tests y TDD
+## Tests
 
-Este proyecto trabaja con **TDD obligatorio**: el test se escribe antes que la
-implementación, y `work-unit-commits` exige que ambos viajen en el mismo commit.
+Este proyecto **no exige TDD como regla general**: para una feature, el test no tiene que
+escribirse antes que la implementación. Lo que `work-unit-commits` sí exige siempre es que
+el test y la conducta que verifica **viajen en el mismo commit**.
+
+**La excepción son los bugfixes, y ahí TDD sigue siendo obligatorio.** Un bugfix va con un
+test de regresión escrito ANTES del fix, que **falle por la razón correcta** y pase después.
+No es ceremonia: un test escrito después del fix no prueba que el bug existía, y nadie puede
+saber si habría fallado. En un bugfix, el orden **es** la evidencia.
 
 **Qué SÍ podés verificar desde acá.** Corrés en `pre-commit`, sobre un commit suelto, y
 el commit **tiene que traer sus tests adentro**. Entonces:
@@ -89,7 +92,7 @@ el commit **tiene que traer sus tests adentro**. Entonces:
 - Un commit que agrega o cambia conducta y **no trae ningún test** es hallazgo.
 - Un test cuyos asserts **describen la implementación** en vez de la conducta esperada
   (repite la fórmula del código, mockea justo lo que debía probar, afirma sobre detalles
-  internos) es la firma de un test escrito *después*. Es hallazgo.
+  internos) es hallazgo: no prueba nada que un refactor no rompa de casualidad.
 - Un test de regresión que **no podría haber fallado antes del fix** — porque su assert
   pasa por construcción, o el fixture no contiene el caso — es hallazgo.
 
@@ -97,8 +100,6 @@ el commit **tiene que traer sus tests adentro**. Entonces:
 orden en que se escribieron los archivos. **No afirmes que el RED no se verificó**: no
 tenés cómo saberlo. Limitate a lo que el diff muestra.
 
-- Las features no triviales y todo bugfix van con tests. Un bugfix necesita un test de
-  regresión que **falle antes del fix por la razón correcta** y pase después.
 - Se cubren los caminos críticos y los edge cases (errores, límites, entradas inválidas),
   no solo el happy path.
 - **Borrar o comentar tests para pasar en verde es hallazgo bloqueante.**
