@@ -1,20 +1,18 @@
 # AGENTS.md — estándares de revisión de `dictado`
 
 > Este archivo lo consume la revisión automática de código (GGA), que lee **solo este
-> archivo**: no puede abrir el `AGENTS.md` global. Por eso las reglas universales están
-> copiadas acá abajo, entre los marcadores `BEGIN:global` / `END:global`, y las mantiene
-> sincronizadas `sync-agents.py`. **No edites ese bloque a mano.**
+> archivo**. Por eso las reglas universales están copiadas acá abajo, entre los marcadores
+> `BEGIN:global` / `END:global`, y se mantienen a mano: no hay sincronización automática.
 >
-> Lo que va **después** del bloque es lo propio de este proyecto: amplía al global.
+> Lo que va **después** del bloque es lo propio de este proyecto: amplía a las universales.
 >
 > Señalá solo lo accionable y apoyado en el diff. Esta revisión corre en `pre-commit`, sobre
 > un commit suelto, antes de que exista el PR y sin conocer el resto de la rama: no reportes
 > nada sobre el PR ni sobre el tamaño de la rama, porque no los podés ver.
 
 <!-- BEGIN:global -->
-<!-- Generado por sync-agents.py desde ~/proyectos/AGENTS.md (v05ed8761).
-     NO EDITAR A MANO: el proximo sync pisa los cambios.
-     Para cambiar una regla universal, edita el global y volve a correr el script. -->
+<!-- Reglas universales. Los marcadores delimitan el bloque que la revision
+     automatica necesita leer entero; se mantiene a mano, editando aca. -->
 
 ## Lenguaje y tipos
 
@@ -28,8 +26,7 @@
 - **Las descripciones de test (`describe`/`it`) son la EXCEPCIÓN: no tienen idioma fijo.**
   Se sigue el idioma de los `it()` **del archivo que se toca**, no el de la regla de arriba.
   **Un `it()` nuevo en inglés NO es un hallazgo** si sus vecinos del archivo están en
-  inglés, y viceversa. Los comentarios DENTRO del cuerpo del test sí van en español
-  siempre. Si el repo tiene un censo medido, vive en su sección propia, no acá.
+  inglés, y viceversa. Si el repo tiene un censo medido, vive en su sección propia, no acá.
 - **La regla NO es retroactiva.** No reportes copy, mensajes de error ni comentarios en
   inglés preexistentes: **solo los nuevos**, y solo en las líneas que el diff agrega o
   reescribe. Un archivo con copy viejo en inglés no es un hallazgo.
