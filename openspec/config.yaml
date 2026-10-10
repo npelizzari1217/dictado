@@ -1,3 +1,5 @@
+# CONGELADO desde el 2026-10-10: ODD reemplazó a SDD y este archivo queda como historia.
+# Ver ~/proyectos/CLAUDE.md §3.2 y §6.1. No lo lee ninguna herramienta vigente.
 schema: spec-driven
 
 project: dictado
@@ -14,8 +16,6 @@ context: |
   Verificación 100% con herramientas nativas de Node: sin devDependencies, sin
   ESLint/Prettier/Jest/Vitest. package.json no debe ganar devDependencies.
 
-strict_tdd: true
-
 projects:
   - path: "."
     stack: "JS vanilla + Express 4 + better-sqlite3 (síncrono)"
@@ -25,7 +25,6 @@ projects:
     framework: "node:test (nativo, sin dependencias)"
 
 testing:
-  strict_tdd: true
   detected: 2026-09-08
   note: >
     Hoy no existen archivos de test en el repo. La capacidad reportada es la del
@@ -78,7 +77,6 @@ rules:
       - Seguir los patrones existentes del código (JS plano, sin framework).
       - Tests nuevos van en *.test.js y los levanta node --test automáticamente.
       - No agregar dependencias de desarrollo ni modificar package.json para instalar herramental.
-    tdd: true
     test_command: "npm test"
   verify:
     test_command: "npm test"
